@@ -1,7 +1,8 @@
 #lang racket
+;Първо домашно
+;Задача 1
 
-;first
-
+;функция, която проверява дали сбора от цифрите на число се дели на числото k
 (define (sum-digits-div x k)
 (define (helper sum x)
   (if (< x 10)
@@ -11,6 +12,7 @@
       #t
       #f))
 
+;функция, която намира броя на специалните числа в интервала [a,b]
 (define (count-specials k a b)
 (define (helper i cnt)
   (cond [(> i b) cnt]
@@ -18,13 +20,16 @@
         [else (helper (+ i 1) cnt)]))
   (helper a 0))
 
+;Тестови примери:
+
 ;(count-specials 8 100 200)
 ;(count-specials 5 10 100) 
 ;(count-specials 8 100 200) 
 ;(count-specials 15 1000 2000)
 
-;second
+;Задача 2
 
+;функция, която намира броя на цифрите в число
 (define (count-digits x)
   (define (helper x cnt)
     (if (< x 10)
@@ -32,6 +37,7 @@
         (helper (quotient x 10) (+ cnt 1))))
   (helper x 0))
 
+;функция, която обръща число
 (define (reverse n)
   (define (helper res n)
     (if (< n 10)
@@ -39,6 +45,7 @@
         (helper (* 10 (+ res (remainder n 10))) (quotient n 10))))
   (helper 0 n))
 
+;функция, която намира ротацията на число, спрямо първата цифра
 (define (rot n)
   (define (helper1)
   (remainder (reverse n) 10))
@@ -55,6 +62,7 @@
      (+ (helper1) (* 10 (helper3 0)))
      (+ (helper1) (helper3 0))))
 
+;функция, която намира стойността на число х, повдигнато на степен n
 (define (pow x n)
   (define (helper i power)
     (if (= i n)
@@ -62,11 +70,13 @@
         (helper (+ i 1) (* power x))))
   (helper 0 1))
 
+;функция, която намира ротацията на число, спрямо i-тата цифра
 (define (curr-shift prev ind cnt)
   (if(= 0 (remainder (quotient (reverse prev) (pow 10 ind)) 10))
   (+ (* (reverse (remainder (reverse prev) (pow 10 ind))) (pow 10 (- cnt ind))) (* 10 (reverse (quotient (reverse prev) (pow 10 ind)))))
   (+ (* (reverse (remainder (reverse prev) (pow 10 ind))) (pow 10 (- cnt ind))) (rot (reverse (quotient (reverse prev) (pow 10 ind)))))))
 
+;функция, която намира максималната ротация на число
 (define (max-rot n)
   (define max (rot n))
   (define cnt (count-digits n))
@@ -75,6 +85,8 @@
           [(> (curr-shift prev ind cnt) max) (helper (curr-shift prev ind cnt) (curr-shift prev ind cnt) (+ ind 1))]
           [else (helper (curr-shift prev ind cnt) max (+ ind 1))]))
     (helper max max 1))
+
+;Тестови примери:
 
 ;(max-rot 56789) 
 ;(max-rot 12490)
