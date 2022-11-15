@@ -115,3 +115,51 @@
 ;(shuffle '(2 5 1 3 4 7))
 ;(shuffle '(1 2 3 4 4 3 2 1))
 ;(shuffle '(1 1 2 2))
+
+;Да се дефинира предикат (triangular? mat), който получава
+;квадратна числова матрица, представена като списък от списъци, и проверява дали
+;тя е горно триъгълна, т.е. дали всички елементи под главния ѝ диагонал са нули.
+
+(define (first-k-zeros? xs k)
+  (define (helper xs)
+    (cond [(empty? xs) #t]
+          [(= 0 (first xs)) (helper (rest xs))]
+          [else #f]))
+  (helper (take xs k)))
+
+(define (triangular? mat)
+  (define (helper xs k)
+    (cond [(empty? xs) #t]
+          [(first-k-zeros? (first xs) k) (helper (rest xs) (+ k 1))]
+          [else #f]))
+  (helper (drop mat 1) 1))
+
+;(triangular? '((1 2 3)
+; (0 5 6)
+; (0 0 9)))
+;(triangular? '((0 2 3)
+; (0 0 6)
+; (1 0 0)))
+;(triangular? '((1 2 3)
+; (1 5 6)
+; (0 0 9)))
+;(triangular? '((1 2 3 4)
+; (0 5 6 7)
+; (0 0 8 9)
+; (0 0 0 9)))
+
+;Да се дефинира процедура от по-висок ред (trailing-zeros n), която връща
+;анонимна функция, която приема предикат p и проверява дали p е в сила за броя
+;на влачещите нули в n!
+
+(define (trailing-zeros n)
+  (define (helper sum k)
+    (if (>= (expt 5 k) n)
+        sum
+        (helper (+ sum (quotient n (expt 5 k))) (+ k 1))))
+  (λ(p?) (p? (helper 0 1))))
+
+;((trailing-zeros 6) even?)
+;((trailing-zeros 1000) even?)
+;((trailing-zeros 100000) even?)
+;((trailing-zeros 1000000000) even?)
